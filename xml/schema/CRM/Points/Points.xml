@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Points</base>
+  <class>Points</class>
+  <name>civicrm_points</name>
+  <comment>Represents a grant of a certain number of points.</comment>
+  <add>4.4</add>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique Points ID</comment>
+    <add>4.4</add>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>contact_id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>FK to Winning Contact</comment>
+    <add>4.4</add>
+  </field>
+  <foreignKey>
+    <name>contact_id</name>
+    <table>civicrm_contact</table>
+    <key>id</key>
+    <add>4.4</add>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>grantor_contact_id</name>
+    <type>int unsigned</type>
+    <comment>FK to Granting Contact</comment>
+    <add>4.4</add>
+  </field>
+  <foreignKey>
+    <name>grantor_contact_id</name>
+    <table>civicrm_contact</table>
+    <key>id</key>
+    <add>4.4</add>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>points</name>
+    <type>int</type>
+    <required>true</required>
+    <comment>Number of points granted/removed</comment>
+    <add>4.4</add>
+  </field>
+
+  <field>
+    <name>start_date</name>
+    <type>date</type>
+    <required>true</required>
+    <comment>Points effective from this date inclusive</comment>
+    <add>4.4</add>
+  </field>
+
+  <field>
+    <name>end_date</name>
+    <type>date</type>
+    <comment>Points effective upto this date inclusive</comment>
+    <add>4.4</add>
+  </field>
+
+  <index>
+    <name>index_date</name>
+    <fieldName>start_date</fieldName>
+    <fieldName>end_date</fieldName>
+    <add>4.4</add>
+  </index>
+
+  <field>
+    <name>description</name>
+    <type>varchar</type>
+    <length>255</length>
+    <comment>Description</comment>
+    <add>4.4</add>
+  </field>
+
+  <field>
+    <name>entity_table</name>
+    <type>varchar</type>
+    <length>64</length>
+    <comment>Points granted because of an entity of this type</comment>
+    <add>4.4</add>
+  </field>
+
+  <field>
+    <name>entity_id</name>
+    <type>int unsigned</type>
+    <comment>Points granted because of an entity with this ID</comment>
+    <add>4.4</add>
+  </field>
+
+  <field>
+    <name>points_type_id</name>
+    <type>varchar</type>
+    <length>512</length>
+    <required>true</required>
+    <comment>Option value for the type of points being granted</comment>
+    <add>4.4</add>
+    <pseudoconstant>
+      <optionGroupName>points_type</optionGroupName>
+    </pseudoconstant>
+  </field>
+
+</table>

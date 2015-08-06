@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<CustomData>
+  <OptionGroups>
+    <OptionGroup>
+      <name>points_type</name>
+      <title>Points Type</title>
+      <description>Enables using CiviPoints for more than one thing</description>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+    </OptionGroup>
+  </OptionGroups>
+
+  <OptionValues>
+    <OptionValue>
+      <label>Default Type</label>
+      <value>1</value>
+      <is_default>1</is_default>
+      <weight>1</weight>
+      <description>CiviPoints default type</description>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>points_type</option_group_name>
+    </OptionValue>
+  </OptionValues>
+</CustomData>
