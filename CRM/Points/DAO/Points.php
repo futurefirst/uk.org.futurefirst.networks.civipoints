@@ -105,6 +105,12 @@ class CRM_Points_DAO_Points extends CRM_Core_DAO {
    */
   public $points;
   /**
+   * Points granted at this date/time
+   *
+   * @var datetime
+   */
+  public $grant_date_time;
+  /**
    * Points effective from this date inclusive
    *
    * @var date
@@ -200,6 +206,13 @@ class CRM_Points_DAO_Points extends CRM_Core_DAO {
             'type'     => CRM_Utils_Type::T_INT,
             'title'    => ts('Points Granted/Removed'),
             'required' => TRUE,
+          ),
+          'grant_date_time' => array(
+            'name'     => 'grant_date_time',
+            'type'     => CRM_Utils_Type::T_DATE + CRM_Utils_Type::T_TIME,
+            'title'    => ts('Date/Time Entered'),
+            'required' => TRUE,
+            'default'  => date('YmdHis'),
           ),
           'start_date' => array(
             'name'     => 'start_date',

@@ -12,6 +12,7 @@ CREATE TABLE `civicrm_points` (
   `contact_id`         int unsigned NOT NULL                COMMENT 'FK to Winning Contact',
   `grantor_contact_id` int unsigned DEFAULT NULL            COMMENT 'FK to Granting Contact',
   `points`             int          NOT NULL                COMMENT 'Number of points granted/removed',
+  `grant_date_time`    datetime     NOT NULL                COMMENT 'Points granted at this date/time',
   `start_date`         date         NOT NULL                COMMENT 'Points effective from this date inclusive',
   `end_date`           date         DEFAULT NULL            COMMENT 'Points effective upto this date inclusive',
   `description`        varchar(255)                         COMMENT 'Description',

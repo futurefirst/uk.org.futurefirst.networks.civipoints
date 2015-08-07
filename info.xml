@@ -4,7 +4,7 @@
   <name>CiviPoints</name>
   <description>Allows points to be allocated to contacts.</description>
   <urls>
-    <url desc="Documentation">http://github.com/futurefirst/uk.org.futurefirst.networks.civipoints/wiki</url>
+    <url desc="Documentation">https://github.com/futurefirst/uk.org.futurefirst.networks.civipoints/wiki</url>
     <url desc="On GitHub">https://github.com/futurefirst/uk.org.futurefirst.networks.civipoints</url>
     <url desc="Future First">http://www.futurefirst.org.uk/</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>

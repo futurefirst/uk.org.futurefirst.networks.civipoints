@@ -58,6 +58,14 @@
   </field>
 
   <field>
+    <name>grant_date_time</name>
+    <type>datetime</type>
+    <required>true</required>
+    <comment>Points granted at this date/time</comment>
+    <add>4.4</add>
+  </field>
+
+  <field>
     <name>start_date</name>
     <type>date</type>
     <required>true</required>

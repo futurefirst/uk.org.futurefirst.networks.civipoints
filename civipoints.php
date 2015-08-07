@@ -47,6 +47,10 @@ function civipoints_civicrm_uninstall() {
  */
 function civipoints_civicrm_enable() {
   _civipoints_civix_civicrm_enable();
+
+  // Make sure the log table is created if required
+  $schema = new CRM_Logging_Schema();
+  $schema->fixSchemaDifferences();
 }
 
 /**
@@ -161,25 +165,25 @@ function civipoints_civicrm_entityTypes(&$entityTypes) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_post
  */
-function civipoints_civicrm_post($op, $objectName, $objectId, &$objectRef) {
-  if ($objectName == 'Points') {
-    watchdog('CiviPoints', "Post: :op :name :id\n:ref", array(
-      ':op'   => $op,
-      ':name' => $objectName,
-      ':id'   => $objectId,
-      ':ref'  => print_r($objectRef, TRUE),
-    ), WATCHDOG_DEBUG);
-  }
-}
+//function civipoints_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+//  if ($objectName == 'Points') {
+//    watchdog('CiviPoints', "Post: :op :name :id\n:ref", array(
+//      ':op'   => $op,
+//      ':name' => $objectName,
+//      ':id'   => $objectId,
+//      ':ref'  => print_r($objectRef, TRUE),
+//    ), WATCHDOG_DEBUG);
+//  }
+//}
 
 /**
  * Implements hook_civicrm_points_sum().
  *
  * This is a custom hook for this extension.
  */
-function civipoints_civicrm_points_sum(&$sum, &$dao) {
-  watchdog('CiviPoints', "Sum: :sum\n:dao", array(
-    ':sum' => $sum,
-    ':dao' => print_r($dao, TRUE),
-  ), WATCHDOG_DEBUG);
-}
+//function civipoints_civicrm_points_sum(&$sum, &$dao) {
+//  watchdog('CiviPoints', "Sum: :sum\n:dao", array(
+//    ':sum' => $sum,
+//    ':dao' => print_r($dao, TRUE),
+//  ), WATCHDOG_DEBUG);
+//}

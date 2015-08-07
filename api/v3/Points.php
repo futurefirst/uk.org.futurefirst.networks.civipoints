@@ -9,20 +9,24 @@
  * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
  */
 function _civicrm_api3_points_create_spec(&$spec) {
-  $spec['id']['title']                    = 'Unique Points ID';
-  $spec['contact_id']['title']            = 'Winning Contact';
-  $spec['contact_id']['api.required']     = 1;
-  $spec['grantor_contact_id']['title']    = 'Granting Contact';
-  $spec['points']['title']                = 'Points Granted/Removed';
-  $spec['points']['api.required']         = 1;
-  $spec['start_date']['title']            = 'Effective From';
-  $spec['start_date']['api.default']      = date('Ymd');
-  $spec['end_date']['title']              = 'Effective To';
-  $spec['description']['title']           = 'Description';
-  $spec['entity_table']['title']          = 'Refers to Entity Type';
-  $spec['entity_id']['title']             = 'Refers to Entity ID';
-  $spec['points_type_id']['title']        = 'Points Type';
-  $spec['points_type_id']['api.required'] = 1;
+  $spec['id']['title']                     = 'Unique Points ID';
+  $spec['contact_id']['title']             = 'Winning Contact';
+  $spec['contact_id']['api.required']      = 1;
+  $spec['grantor_contact_id']['title']     = 'Granting Contact';
+  $spec['points']['title']                 = 'Points Granted/Removed';
+  $spec['points']['api.required']          = 1;
+  $spec['grant_date_time']['title']        = 'Date/Time Entered';
+  $spec['grant_date_time']['api.default']  = date('YmdHis');
+  $spec['grant_date_time']['api.required'] = 1;
+  $spec['start_date']['title']             = 'Effective From';
+  $spec['start_date']['api.default']       = date('Ymd');
+  $spec['start_date']['api.required']      = 1;
+  $spec['end_date']['title']               = 'Effective To';
+  $spec['description']['title']            = 'Description';
+  $spec['entity_table']['title']           = 'Refers to Entity Type';
+  $spec['entity_id']['title']              = 'Refers to Entity ID';
+  $spec['points_type_id']['title']         = 'Points Type';
+  $spec['points_type_id']['api.required']  = 1;
 }
 
 /**

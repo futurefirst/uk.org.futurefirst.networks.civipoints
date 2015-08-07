@@ -13,6 +13,7 @@ class CRM_Points_BAO_Points extends CRM_Points_DAO_Points {
   public static function create($params) {
     $hook = empty($params['id']) ? 'create' : 'edit';
 
+    // Basically just runs hooks and passes parameters through to the DAO
     CRM_Utils_Hook::pre($hook, self::ENTITY_NAME, CRM_Utils_Array::value('id', $params), $params);
     $className = self::DAO_NAME;
     $instance = new $className();
@@ -30,11 +31,14 @@ class CRM_Points_BAO_Points extends CRM_Points_DAO_Points {
    * @return int
    */
   public static function getSum($params) {
+    // Check explicitly that a date has been specified at which to find the
+    // points sum (this isn't a DAO parameter), then create a DAO
     CRM_Utils_Type::validate($params['date'], 'Date');
     $className = self::DAO_NAME;
     $instance = new $className();
     $instance->copyValues($params);
 
+    // Clear any default SELECT parameters, just want the sum as of that date
     $instance->selectAdd();
     $instance->selectAdd("SUM(`points`) AS `sum_points`");
     $instance->whereAdd("(`start_date` <= '{$params['date']}' AND (`end_date` >= '{$params['date']}' OR `end_date` IS NULL))");
