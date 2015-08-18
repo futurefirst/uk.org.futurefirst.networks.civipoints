@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/points/tab</path>
+    <page_callback>CRM_Points_Page_Tab</page_callback>
+    <title>Tab</title>
+    <access_arguments>access CiviCRM,view all contacts</access_arguments>
+  </item>
+</menu>

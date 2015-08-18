@@ -144,12 +144,15 @@ function civipoints_civicrm_preProcess($formName, &$form) {
 /**
  * Implements hook_civicrm_entityTypes().
  *
+ * Loads any custom entity type definitions within the extension.
  * Doesn't seem to be listed on the wiki at time of writing.
  * This implementation is adapted from Civix's implementation of hook_civicrm_managed.
  */
 function civipoints_civicrm_entityTypes(&$entityTypes) {
+  // Find all custom entity type definition files under the extension's directory.
   $mgdFiles = _civipoints_civix_find_files(__DIR__, '*.entityType.php');
   foreach ($mgdFiles as $file) {
+    // Add any definitions found in that file to the list.
     $es = include $file;
     foreach ($es as $e) {
       if (empty($e['module'])) {
@@ -161,29 +164,71 @@ function civipoints_civicrm_entityTypes(&$entityTypes) {
 }
 
 /**
- * Implements hook_civicrm_post().
+ * Implements hook_civicrm_alterAPIPermissions().
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_post
+ * Require similar permissions to do stuff with Points as to do stuff with
+ * certain Contact-related entities like Note, EntityTag, Website, Email, Phone etc.
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterAPIPermissions
  */
-//function civipoints_civicrm_post($op, $objectName, $objectId, &$objectRef) {
-//  if ($objectName == 'Points') {
-//    watchdog('CiviPoints', "Post: :op :name :id\n:ref", array(
-//      ':op'   => $op,
-//      ':name' => $objectName,
-//      ':id'   => $objectId,
-//      ':ref'  => print_r($objectRef, TRUE),
-//    ), WATCHDOG_DEBUG);
-//  }
-//}
+function civipoints_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['points'] = array(
+    'get'          => array('access CiviCRM', 'view all contacts'),
+    'getsum'       => array('access CiviCRM', 'view all contacts'),
+    'geteffective' => array('access CiviCRM', 'view all contacts'),
+    'delete'       => array('access CiviCRM', 'delete contacts'),
+    'default'      => array('access CiviCRM', 'edit all contacts'),
+  );
+}
 
 /**
- * Implements hook_civicrm_points_sum().
+ * Implements hook_civicrm_tabs().
  *
- * This is a custom hook for this extension.
+ * For contacts who have or have had points, display a tab on the contact view page.
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tabs
  */
-//function civipoints_civicrm_points_sum(&$sum, &$dao) {
-//  watchdog('CiviPoints', "Sum: :sum\n:dao", array(
-//    ':sum' => $sum,
-//    ':dao' => print_r($dao, TRUE),
-//  ), WATCHDOG_DEBUG);
-//}
+function civipoints_civicrm_tabs(&$tabs, $contactID) {
+  // One tab for each type of points
+  $pointsTypes = CRM_Core_OptionGroup::values('points_type');
+
+  foreach ($pointsTypes as $pointsTypeId => $pointsTypeLabel) {
+    // Has this contact ever had any points of this type?
+    // If not, don't bother showing the tab.
+    // Note, this costs a lookup per active points type per contact page view, even if no results.
+    $countRecs = civicrm_api('Points', 'getcount', array(
+      'version'        => 3,
+      'contact_id'     => $contactID,
+      'points_type_id' => $pointsTypeId,
+    ));
+    if (!$countRecs) {
+      return;
+    }
+
+    // Display the current points total in the tab heading
+    $sum = civicrm_api('Points', 'getsum', array(
+      'version'        => 3,
+      'contact_id'     => $contactID,
+      'points_type_id' => $pointsTypeId,
+    ));
+    if ($sum === NULL) {
+      $sum = 0;
+    }
+
+    // Page URL for a breakdown of points granted to that contact
+    $url = CRM_Utils_System::url('civicrm/points/tab', array(
+      'snippet' => 1,
+      'cid'     => $contactID,
+      'type'    => $pointsTypeId,
+    ));
+
+    // Add a tab for this points type
+    $tabs[] = array(
+      'id'     => 'civipoints_' . $pointsTypeId,
+      'url'    => $url,
+      'title'  => ts('Points (%1)', array(1 => $pointsTypeLabel)),
+      'weight' => 200,
+      'count'  => $sum,
+    );
+  }
+}
