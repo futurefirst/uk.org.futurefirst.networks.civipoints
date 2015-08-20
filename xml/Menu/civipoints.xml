@@ -6,4 +6,10 @@
     <title>Tab</title>
     <access_arguments>access CiviCRM,view all contacts</access_arguments>
   </item>
+  <item>
+    <path>civicrm/points/grant</path>
+    <page_callback>CRM_Points_Form_Grant</page_callback>
+    <title>Grant</title>
+    <access_arguments>access CiviCRM,edit all contacts</access_arguments>
+  </item>
 </menu>
