@@ -227,8 +227,51 @@ function civipoints_civicrm_tabs(&$tabs, $contactID) {
       'id'     => 'civipoints_' . $pointsTypeId,
       'url'    => $url,
       'title'  => ts('Points (%1)', array(1 => $pointsTypeLabel)),
-      'weight' => 200,
+      'weight' => _civipoints_maxweight($tabs) + 5,
       'count'  => $sum,
     );
   }
+}
+
+/**
+ * Implements hook_civicrm_summaryActions().
+ *
+ * For contacts who may be granted points, add the option to the menu
+ * that appears when the Actions button is clicked on the contact view summary.
+ *
+ * @see CRM_Contact_BAO_Contact::contextMenu
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tabs
+ */
+function civipoints_civicrm_summaryActions(&$actions, $contactID) {
+  // Idea for the future: bail out here if we're not meant to grant points
+  // to this contact or this contact type, and it won't show the action
+  // (won't stop you typing the civicrm/points/grant URL manually)
+
+  // Add an entry to the end of the actions section
+  $actions['civipoints'] = array(
+    'title'       => ts('Grant Points'),
+    'weight'      => _civipoints_maxweight($actions) + 5,
+    'ref'         => 'grant-points',
+    'key'         => 'civipoints',
+    // cid=xxxx gets added to the action URL automatically
+    'href'        => CRM_Utils_System::url('civicrm/points/grant', 'reset=1'),
+    'permissions' => array('edit all contacts'),
+  );
+}
+
+/**
+ * Find the highest current weight of items in a menu.
+ *
+ * @param array $menu
+ * @return int
+ */
+function _civipoints_maxweight($menu) {
+  $maxweight = 0;
+  foreach ($menu as $entry) {
+    $weight = CRM_Utils_Array::value('weight', $entry, 0);
+    if ($weight > $maxweight) {
+      $maxweight = $weight;
+    }
+  }
+  return $maxweight;
 }

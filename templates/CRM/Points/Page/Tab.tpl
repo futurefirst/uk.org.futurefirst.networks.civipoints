@@ -2,42 +2,55 @@
  * CiviPoints
  * Smarty template for contact view Points tab(s)
  *}
-<table id="points-tab-table">
-  <thead>
-    <tr>
-      <th>{ts}Points{/ts}</th>
-      <th>{ts}Granted by{/ts}</th>
-      <th>{ts}Granted by{/ts}</th>       <!-- for sorting, hidden -->
-      <th>{ts}Date/time granted{/ts}</th>
-      <th>{ts}Date/time granted{/ts}</th><!-- for sorting, hidden -->
-      <th>{ts}Start date{/ts}</th>
-      <th>{ts}Start date{/ts}</th>       <!-- for sorting, hidden -->
-      <th>{ts}End date{/ts}</th>
-      <th>{ts}End date{/ts}</th>         <!-- for sorting, hidden -->
-      <th>{ts}Description{/ts}</th>
-      <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
-      <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
-    </tr>
-  </thead>
-  <tbody>
-    {foreach from=$points item=rec}
-      <tr>
-        <td>{$rec.points}</td>
-        <td>{$rec.grantor_contact_id}</td>  <!-- will be replaced with a link -->
-        <td>{$rec.grantor_sort_name}</td>   <!-- for sorting, hidden -->
-        <td>{$rec.grant_date_time_show}</td>
-        <td>{$rec.grant_date_time}</td>     <!-- for sorting, hidden -->
-        <td>{$rec.start_date_show}</td>
-        <td>{$rec.start_date}</td>          <!-- for sorting, hidden -->
-        <td>{$rec.end_date_show}</td>
-        <td>{$rec.end_date}</td>            <!-- for sorting, hidden -->
-        <td>{$rec.description}</td>
-        <td>{$rec.entity_table}</td>        <!-- not implemented yet, hidden -->
-        <td>{$rec.entity_id}</td>           <!-- not implemented yet, hidden -->
-      </tr>
-    {/foreach}
-  </tbody>
-</table>
+<div class="view-content">
+  <div class="crm-block crm-content-block">
+    <div class="action-link">
+      <a class="button" href="{crmURL p="civicrm/points/grant" q="cid=$cid"}">
+        <span>
+          <div class="icon add-icon"/>
+          {ts}Grant Points{/ts}
+        </span>
+      </a>
+    </div>
+
+    <table id="points-tab-table">
+      <thead>
+        <tr>
+          <th>{ts}Points{/ts}</th>
+          <th>{ts}Granted by{/ts}</th>
+          <th>{ts}Granted by{/ts}</th>       <!-- for sorting, hidden -->
+          <th>{ts}Date/time granted{/ts}</th>
+          <th>{ts}Date/time granted{/ts}</th><!-- for sorting, hidden -->
+          <th>{ts}Start date{/ts}</th>
+          <th>{ts}Start date{/ts}</th>       <!-- for sorting, hidden -->
+          <th>{ts}End date{/ts}</th>
+          <th>{ts}End date{/ts}</th>         <!-- for sorting, hidden -->
+          <th>{ts}Description{/ts}</th>
+          <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
+          <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
+        </tr>
+      </thead>
+      <tbody>
+        {foreach from=$points item=rec}
+          <tr>
+            <td>{$rec.points}</td>
+            <td>{$rec.grantor_contact_id}</td>  <!-- will be replaced with a link -->
+            <td>{$rec.grantor_sort_name}</td>   <!-- for sorting, hidden -->
+            <td>{$rec.grant_date_time_show}</td>
+            <td>{$rec.grant_date_time}</td>     <!-- for sorting, hidden -->
+            <td>{$rec.start_date_show}</td>
+            <td>{$rec.start_date}</td>          <!-- for sorting, hidden -->
+            <td>{$rec.end_date_show}</td>
+            <td>{$rec.end_date}</td>            <!-- for sorting, hidden -->
+            <td>{$rec.description}</td>
+            <td>{$rec.entity_table}</td>        <!-- not implemented yet, hidden -->
+            <td>{$rec.entity_id}</td>           <!-- not implemented yet, hidden -->
+          </tr>
+        {/foreach}
+      </tbody>
+    </table>
+  </div>
+</div>
 
 {literal}
   <script type="text/javascript">
