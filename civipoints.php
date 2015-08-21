@@ -254,7 +254,11 @@ function civipoints_civicrm_summaryActions(&$actions, $contactID) {
     'ref'         => 'grant-points',
     'key'         => 'civipoints',
     // cid=xxxx gets added to the action URL automatically
-    'href'        => CRM_Utils_System::url('civicrm/points/grant', 'reset=1'),
+    'href'        => CRM_Utils_System::url('civicrm/points/grant', array(
+      'reset'   => 1,
+      'action'  => 'add',
+      'context' => 'points',
+    )),
     'permissions' => array('edit all contacts'),
   );
 }

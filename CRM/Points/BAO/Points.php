@@ -5,6 +5,28 @@ class CRM_Points_BAO_Points extends CRM_Points_DAO_Points {
   const ENTITY_NAME = 'Points';
 
   /**
+   * Get details of available action links.
+   *
+   * @return array In the form accepted by CRM_Core_Action::formLink
+   */
+  public static function actionLinks() {
+    return array(
+      CRM_Core_Action::ADD    => array(
+        'name'  => ts('Grant'),
+        'title' => ts('Grant Points'),
+        'url'   => 'civicrm/points/grant',
+        'qs'    => 'cid=%%cid%%',
+      ),
+      CRM_Core_Action::UPDATE => array(
+        'name'  => ts('Edit'),
+        'title' => ts('Edit Existing Points'),
+        'url'   => 'civicrm/points/grant',
+        'qs'    => 'pid=%%pid%%',
+      ),
+    );
+  }
+
+  /**
    * Create a new Points based on array-data
    *
    * @param array $params key-value pairs

@@ -31,16 +31,27 @@ class CRM_Points_Page_Tab extends CRM_Core_Page {
       CRM_Core_Error::fatal($pointsResult['error_message']);
     }
 
-    // Add some extra fields for ease of presentation.
     foreach ($pointsResult['values'] as &$points) {
+      // Add some extra fields for ease of presentation.
       $points['grantor_sort_name']    = $points['api.contact.getvalue'];
       $points['grant_date_time_show'] = CRM_Utils_Date::customFormat($points['grant_date_time']);
       $points['start_date_show']      = CRM_Utils_Date::customFormat($points['start_date']);
       $points['end_date_show']        = CRM_Utils_Date::customFormat($points['end_date']);
+
+      // Add actions links
+      $points['links'] = CRM_Core_Action::formLink(
+        CRM_Points_BAO_Points::actionLinks(),
+        CRM_Core_Action::UPDATE | CRM_Core_Action::DELETE,
+        array(
+          'cid'  => $points['contact_id'],
+          'type' => $points['points_type_id'],
+          'pid'  => $points['id'],
+        )
+      );
     }
 
     $this->assign('points', $pointsResult['values']);
-    $this->assign('cid', $cid);
+    $this->assign('cid',    $cid);
     parent::run();
   }
 }

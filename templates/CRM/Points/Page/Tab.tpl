@@ -28,6 +28,7 @@
           <th>{ts}Description{/ts}</th>
           <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
           <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
+          <th/>                              <!-- action links, no title -->
         </tr>
       </thead>
       <tbody>
@@ -45,6 +46,7 @@
             <td>{$rec.description}</td>
             <td>{$rec.entity_table}</td>        <!-- not implemented yet, hidden -->
             <td>{$rec.entity_id}</td>           <!-- not implemented yet, hidden -->
+            <td>{$rec.links}</td>
           </tr>
         {/foreach}
       </tbody>
@@ -67,6 +69,7 @@
       var COL_DESCRIPTION     = 9;
       var COL_ENTITY_TABLE    = 10;
       var COL_ENTITY_ID       = 11;
+      var COL_ACTIONS         = 12;
 
       cj('#points-tab-table').dataTable({
         // Order by grant date/time ascending
@@ -90,7 +93,9 @@
           // Hide sort-only columns
           { 'aTargets': [ COL_GRANTOR_SORT, COL_GRANT_DATE_SORT, COL_START_DATE_SORT, COL_END_DATE_SORT ], 'bVisible': false },
           // Entity reference, not implemented yet
-          { 'aTargets': [ COL_ENTITY_TABLE, COL_ENTITY_ID ], 'bVisible': false }
+          { 'aTargets': [ COL_ENTITY_TABLE, COL_ENTITY_ID ], 'bVisible': false },
+          // Action links
+          { 'aTargets': [ COL_ACTIONS ], 'bSortable': false }
         ]
       });
     });
