@@ -48,7 +48,7 @@ function civipoints_civicrm_uninstall() {
 function civipoints_civicrm_enable() {
   _civipoints_civix_civicrm_enable();
 
-  // Make sure the log table is created if required
+  // Make sure the log table is created if required (CRM-15078)
   $schema = new CRM_Logging_Schema();
   $schema->fixSchemaDifferences();
 }

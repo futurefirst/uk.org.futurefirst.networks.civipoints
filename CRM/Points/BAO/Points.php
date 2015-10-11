@@ -71,7 +71,15 @@ class CRM_Points_BAO_Points extends CRM_Points_DAO_Points {
    * @param CRM_Points_DAO_Points $dao
    */
   protected static function hook_civicrm_points_sum(&$sum, &$dao) {
-    return CRM_Utils_Hook::singleton()->invoke(2, $sum, $dao, $sum, $sum, $sum, 'civicrm_points_sum');
+    // The number of parameters to CRM_Utils_Hook::invoke changes from 4.4 to 4.5
+    $version = civicrm_api('System', 'getvalue', array('version' => 3, 'return' => 'version'));
+    $vparts  = explode('.', $version);
+    if ($vparts[0] > 4 || ($vparts[0] == 4 && $vparts[1] > 4)) {
+      return CRM_Utils_Hook::singleton()->invoke(2, $sum, $dao, $sum, $sum, $sum, $sum, 'civicrm_points_sum');
+    }
+    else {
+      return CRM_Utils_Hook::singleton()->invoke(2, $sum, $dao, $sum, $sum, $sum, 'civicrm_points_sum');
+    }
   }
 
   /**
