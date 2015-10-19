@@ -279,3 +279,27 @@ function _civipoints_maxweight($menu) {
   }
   return $maxweight;
 }
+
+/**
+ * Check whether CiviRules is installed.
+ *
+ * From org.civicoop.emailapi, by Jaap Jaansma of CiviCooP
+ *
+ * @return boolean
+ */
+function _civipoints_is_civirules_installed() {
+  $installed = FALSE;
+  try {
+    $extensions = civicrm_api3('Extension', 'get');
+    foreach ($extensions['values'] as $ext) {
+      if ($ext['key'] == 'org.civicoop.civirules' && $ext['status'] == 'installed') {
+        $installed = TRUE;
+      }
+    }
+    return $installed;
+  }
+  catch (Exception $e) {
+    return FALSE;
+  }
+  return FALSE;
+}
