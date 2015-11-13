@@ -12,4 +12,10 @@
     <title>Grant</title>
     <access_arguments>access CiviCRM,edit all contacts</access_arguments>
   </item>
+  <item>
+    <path>civicrm/points/delete</path>
+    <page_callback>CRM_Points_Form_Delete</page_callback>
+    <title>Delete</title>
+    <access_arguments>access CiviCRM,edit all contacts</access_arguments>
+  </item>
 </menu>
