@@ -8,7 +8,10 @@ require_once 'CRM/Core/Form.php';
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
 class CRM_Points_Form_Grant extends CRM_Core_Form {
+  // Maximum length of description field
   const DESCRIPTION_MAX = 255;
+  // Years either side of present for start/end date selection
+  const YEARS_RANGE = 20;
 
   /**
    * @var int Cid of winning contact
@@ -93,8 +96,8 @@ class CRM_Points_Form_Grant extends CRM_Core_Form {
     $this->add('text',   'points',         ts('Points'),      array('size' => 5, 'maxlength' => 5), TRUE);
 
     // Effective date (required), expiry date (optional)
-    $this->add('date', 'start_date', ts('Effective From'), array('minYear' => date('Y') - 5, 'maxYear' => date('Y') + 5, 'addEmptyOption' => FALSE), TRUE);
-    $this->add('date', 'end_date',   ts('Effective To'),   array('minYear' => date('Y') - 5, 'maxYear' => date('Y') + 5, 'addEmptyOption' => TRUE), FALSE);
+    $this->add('date', 'start_date', ts('Effective From'), array('minYear' => date('Y') - self::YEARS_RANGE, 'maxYear' => date('Y') + self::YEARS_RANGE, 'addEmptyOption' => FALSE), TRUE);
+    $this->add('date', 'end_date',   ts('Effective To'),   array('minYear' => date('Y') - self::YEARS_RANGE, 'maxYear' => date('Y') + self::YEARS_RANGE, 'addEmptyOption' => TRUE), FALSE);
 
     // Description (with max length)
     $this->add('textarea', 'description', ts('Description'), array('maxlength' => self::DESCRIPTION_MAX));
