@@ -7,7 +7,7 @@
     <div class="action-link">
       <a class="button" href="{crmURL p="civicrm/points/grant" q="cid=$cid"}">
         <span>
-          <div class="icon add-icon"/>
+          <div class="icon add-icon"></div>
           {ts}Grant Points{/ts}
         </span>
       </a>
