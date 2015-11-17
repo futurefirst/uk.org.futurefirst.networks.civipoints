@@ -45,13 +45,13 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
    * This function is called prior to building and submitting the form
    */
   function preProcess() {
-    // Editing existing Points record?
+    // Deleting existing Points record?
     $existing_id = CRM_Utils_Request::retrieve('pid', 'Positive');
     if (!empty($existing_id)) {
       $this->_existing_id = $existing_id;
     }
 
-    // Winning contact (passed in URL, can't be changed here)
+    // Winning contact
     $contact_id = $this->getSubmitValue('contact_id');
     if (!empty($contact_id)) {
       $this->_contact_id = $contact_id;
@@ -65,30 +65,30 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
    * Will be called prior to outputting html (and prior to buildForm hook)
    */
   function buildQuickForm() {
-    // Existing Points entity ID (if editing rather than creating)
+    // Existing Points entity ID
     $this->add('hidden', 'id', $this->_existing_id);
 
-    // Winning contact (passed in URL, can't be changed here)
+    // Winning contact
     $this->add('link',   'contact_link', ts('Contact Name'), $this->_contact_url, FALSE, $this->_contact_name);
     $this->add('hidden', 'contact_id',   $this->_contact_id);
 
-    // Granting contact (current user, can't be changed here)
+    // Granting contact
     $this->add('link',   'grantor_contact_link', ts('Granting Contact'), $this->_grantor_contact_url, FALSE, $this->_grantor_contact_name);
     $this->add('hidden', 'grantor_contact_id',   $this->_grantor_contact_id);
 
-    // Points type and number of points (required)
+    // Points type and number of points
     $this->add('static', 'points_type_id', ts('Points Type'));
     $this->add('static', 'points',         ts('Points'));
 
-    // Effective date (required), expiry date (optional)
+    // Grant date/time, effective date, expiry date
     $this->add('static', 'grant_date_time', ts('Date/Time Granted'));
     $this->add('static', 'start_date',      ts('Effective From'));
     $this->add('static', 'end_date',        ts('Effective To'));
 
-    // Description (with max length)
+    // Description
     $this->add('static', 'description', ts('Description'));
 
-    // Submit/Cancel buttons
+    // Delete/Cancel buttons
     $this->addButtons(array(
       array(
         'type'      => 'submit',
@@ -131,8 +131,7 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
 
   /**
    * Returns default values of form elements.
-   * If creating a new record, default start date to current date.
-   * If editing a record, load defaults from it.
+   * If deleting an existing record, display values from it.
    * Look up and set the displayed name and contact view page URL for the winning and granting contacts.
    *
    * @return array
@@ -141,7 +140,7 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
     // Defaults for new records
     $defaults = array();
 
-    // If editing...
+    // If deleting existing...
     if (!empty($this->_existing_id)) {
       $pointsExist = civicrm_api('Points', 'getsingle', array('version' => 3, 'id' => $this->_existing_id));
       if (civicrm_error($pointsExist)) {
@@ -184,7 +183,7 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
    * Called after form is successfully submitted
    */
   function postProcess() {
-    // Filter out stuff that isn't a parameter to the Points creation
+    // We only care about the ID of the Points entity to be deleted
     $values = $this->exportValues();
 
     // Delete the Points entity.

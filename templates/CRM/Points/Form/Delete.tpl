@@ -3,7 +3,8 @@
   <div class="crm-submit-buttons">
     {include file="CRM/common/formButtons.tpl" location="top"}
   </div>
-  <div class="messages help">
+  <div class="messages status no-popup">
+    <div class="icon inform-icon"></div>
     {ts}
       Please note that these points will be removed from history for this contact.
       If points were not granted in error, but need to expire or be reset,
