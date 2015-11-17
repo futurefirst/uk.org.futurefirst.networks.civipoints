@@ -23,6 +23,12 @@ class CRM_Points_BAO_Points extends CRM_Points_DAO_Points {
         'url'   => 'civicrm/points/grant',
         'qs'    => 'pid=%%pid%%',
       ),
+      CRM_Core_Action::DELETE => array(
+        'name'  => ts('Delete'),
+        'title' => ts('Delete Existing Points'),
+        'url'   => 'civicrm/points/delete',
+        'qs'    => 'pid=%%pid%%',
+      ),
     );
   }
 
