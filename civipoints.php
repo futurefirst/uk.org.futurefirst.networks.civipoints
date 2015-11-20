@@ -202,7 +202,7 @@ function civipoints_civicrm_tabs(&$tabs, $contactID) {
       'points_type_id' => $pointsTypeId,
     ));
     if (!$countRecs) {
-      return;
+      continue;
     }
 
     // Display the current points total in the tab heading
