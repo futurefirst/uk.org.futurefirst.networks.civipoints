@@ -28,7 +28,7 @@
           <th>{ts}Description{/ts}</th>
           <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
           <th>{ts}Related to{/ts}</th>       <!-- not implemented yet, hidden -->
-          <th/>                              <!-- action links, no title -->
+          <th></th>                          <!-- action links, no title -->
         </tr>
       </thead>
       <tbody>
