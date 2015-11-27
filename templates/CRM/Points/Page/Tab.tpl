@@ -35,7 +35,7 @@
         {foreach from=$points item=rec}
           <tr>
             <td>{$rec.points}</td>
-            <td>{$rec.grantor_contact_id}</td>  <!-- will be replaced with a link -->
+            <td>{$rec.grantor_link}</td>
             <td>{$rec.grantor_sort_name}</td>   <!-- for sorting, hidden -->
             <td>{$rec.grant_date_time_show}</td>
             <td>{$rec.grant_date_time}</td>     <!-- for sorting, hidden -->
@@ -81,11 +81,7 @@
 
         'aoColumnDefs':    [
           // Granting contact link
-          // Note, fnRender is now deprecated
-          // Also it would be equally possible to use these columns the other way round with bUseRendered
-          { 'aTargets': [ COL_GRANTOR_SHOW ], 'iDataSort': COL_GRANTOR_SORT, 'fnRender': function(obj) {
-            return "<a href='{/literal}{crmURL p="civicrm/contact/view" q="reset=1&cid="}{literal}" + obj.aData[COL_GRANTOR_SHOW] + "'>" + obj.aData[COL_GRANTOR_SORT] + "</a>";
-          }},
+          { 'aTargets': [ COL_GRANTOR_SHOW    ], 'iDataSort': COL_GRANTOR_SORT    },
           // Display dates in local format, but sort by the underlying ISO format
           { 'aTargets': [ COL_GRANT_DATE_SHOW ], 'iDataSort': COL_GRANT_DATE_SORT },
           { 'aTargets': [ COL_START_DATE_SHOW ], 'iDataSort': COL_START_DATE_SORT },

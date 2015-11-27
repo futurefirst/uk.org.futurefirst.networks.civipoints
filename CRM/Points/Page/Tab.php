@@ -38,6 +38,12 @@ class CRM_Points_Page_Tab extends CRM_Core_Page {
       $points['start_date_show']      = CRM_Utils_Date::customFormat($points['start_date']);
       $points['end_date_show']        = CRM_Utils_Date::customFormat($points['end_date']);
 
+      $grantor_url = CRM_Utils_System::url('civicrm/contact/view', array(
+        'reset' => 1,
+        'cid'   => $points['grantor_contact_id'],
+      ));
+      $points['grantor_link'] = "<a href='{$grantor_url}' title='" . ts('View Contact') . "'>{$points['api.contact.getvalue']}</a>";
+
       // Add actions links
       $points['links'] = CRM_Core_Action::formLink(
         CRM_Points_BAO_Points::actionLinks(),
