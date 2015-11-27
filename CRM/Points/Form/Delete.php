@@ -91,7 +91,7 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
     // Delete/Cancel buttons
     $this->addButtons(array(
       array(
-        'type'      => 'submit',
+        'type'      => 'next',
         'name'      => ts('Delete'),
         'isDefault' => TRUE,
       ),
@@ -217,8 +217,6 @@ class CRM_Points_Form_Delete extends CRM_Core_Form {
       'success'
     );
 
-    // On success, redirect to the winning contact's page.
     parent::postProcess();
-    CRM_Utils_System::redirect($this->_contact_url);
   }
 }

@@ -105,7 +105,7 @@ class CRM_Points_Form_Grant extends CRM_Core_Form {
     // Submit/Cancel buttons
     $this->addButtons(array(
       array(
-        'type'      => 'submit',
+        'type'      => 'upload',
         'name'      => ts('Grant'),
         'isDefault' => TRUE,
       ),
@@ -318,7 +318,7 @@ class CRM_Points_Form_Grant extends CRM_Core_Form {
     if (civicrm_error($createResult)) {
       CRM_Core_Session::setStatus(
         $createResult['error_message'],
-        ts('Error granting points'),
+        empty($values['id']) ? ts('Error granting points') : ts('Error editing points'),
         'error'
       );
       CRM_Core_Error::debug_log_message(
@@ -337,7 +337,7 @@ class CRM_Points_Form_Grant extends CRM_Core_Form {
     if (empty($values['end_date'])) {
       CRM_Core_Session::setStatus(
         ts("%1 '%2' points granted to %3 from %4 inclusive. These points will not expire.", $tsParams),
-        ts('Points Granted'),
+        empty($values['id']) ? ts('Points Granted') : ts('Points Edited'),
         'success'
       );
     }
@@ -345,13 +345,11 @@ class CRM_Points_Form_Grant extends CRM_Core_Form {
       $tsParams[5] = CRM_Utils_Date::customFormat($values['end_date']);
       CRM_Core_Session::setStatus(
         ts("%1 '%2' points granted to %3 from %4 to %5 inclusive.", $tsParams),
-        ts('Points Granted'),
+        empty($values['id']) ? ts('Points Granted') : ts('Points Edited'),
         'success'
       );
     }
 
-    // On success, redirect to the winning contact's page.
     parent::postProcess();
-    CRM_Utils_System::redirect($this->_contact_url);
   }
 }
