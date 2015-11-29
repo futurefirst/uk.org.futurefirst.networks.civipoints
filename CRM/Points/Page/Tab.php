@@ -58,6 +58,7 @@ class CRM_Points_Page_Tab extends CRM_Core_Page {
 
     $this->assign('points', $pointsResult['values']);
     $this->assign('cid',    $cid);
+    $this->assign('type',   $type);
     parent::run();
   }
 }

@@ -5,7 +5,7 @@
 <div class="view-content">
   <div class="crm-block crm-content-block">
     <div class="action-link">
-      <a class="button" href="{crmURL p="civicrm/points/grant" q="cid=$cid"}">
+      <a class="button" href="{crmURL p="civicrm/points/grant" q="cid=$cid&type=$type"}">
         <span>
           <div class="icon add-icon"></div>
           {ts}Grant Points{/ts}
@@ -13,7 +13,7 @@
       </a>
     </div>
 
-    <table id="points-tab-table">
+    <table id="points-tab-table-{$type}">
       <thead>
         <tr>
           <th>{ts}Points{/ts}</th>
@@ -71,7 +71,7 @@
       var COL_ENTITY_ID       = 11;
       var COL_ACTIONS         = 12;
 
-      cj('#points-tab-table').dataTable({
+      cj('#points-tab-table-{/literal}{$type}{literal}').dataTable({
         // Order by grant date/time ascending
         'aaSorting':       [[ COL_GRANT_DATE_SORT, 'asc' ]],
         // Try to make it look like Activities and Mailings

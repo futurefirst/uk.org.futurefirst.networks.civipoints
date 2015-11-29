@@ -153,13 +153,14 @@ class CRM_Points_Form_Grant extends CRM_Core_Form {
    */
   function setDefaultValues() {
     // Defaults for new records
+    $type = CRM_Utils_Request::retrieve('type', 'String');
     $defaults = array(
       'start_date' => array(
         'd' => date('d'),
         'M' => date('m'),
         'Y' => date('Y'),
       ),
-      'points_type_id' => civicrm_api('OptionValue', 'getvalue', array(
+      'points_type_id' => $type ? $type : civicrm_api('OptionValue', 'getvalue', array(
         'version'           => 3,
         'option_group_name' => 'points_type',
         'is_default'        => 1,
