@@ -13,6 +13,19 @@
       </a>
     </div>
 
+    <div class="crm-accordion-wrapper">
+      <div class="crm-accordion-header">
+        {ts}Filter by effective date{/ts}
+      </div>
+      <div class="crm-accordion-body">
+        &nbsp;
+        <input type="button" id="points-current-{$type}" value="{ts}Current{/ts}"/>
+        <input type="button" id="points-all-{$type}" value="{ts}All{/ts}"/>
+        <label for="points-date-{$type}">{ts}Show points as at date:{/ts}</label>
+        <input type="text" id="points-date-{$type}" size="10" maxlength="10"/>
+      </div>
+    </div>
+
     <table id="points-tab-table-{$type}">
       <thead>
         <tr>
@@ -93,6 +106,49 @@
           // Action links
           { 'aTargets': [ COL_ACTIONS ], 'bSortable': false }
         ]
+      });
+
+      // Handlers for filtering by effective date
+      cj('#points-date-{/literal}{$type}{literal}').datepicker({
+        dateFormat: 'yy-mm-dd'
+      });
+
+      cj('#points-date-{/literal}{$type}{literal}').change(function() {
+        var table = cj('#points-tab-table-{/literal}{$type}{literal}').dataTable();
+
+        CRM.api('Points', 'geteffective', {
+          'version':        3,
+          'sequential':     1,
+          'contact_id':     {/literal}{$cid}{literal},
+          'points_type_id': {/literal}{$type}{literal},
+          'date':           cj(this).val().replace(/-/g, ''), // 2015-01-01 to 20150101
+          'options':        { 'limit': 0 },
+          'api.contact.getvalue': {
+            'id':     '$value.grantor_contact_id',
+            'return': 'sort_name'
+          }
+
+        }, { 'success': function(data) {
+          console.log(data);
+          table.fnClearTable(); // Don't seem to have the fnReloadAjax plugin
+          for (var i = 0; i < data.values.length; i++) {
+            table.fnAddData([
+              data.values[i]['points'],
+              'grantor_contact_id' in data.values[i] ? '<a href="http://www.example.com">' + data.values[i]['api.contact.getvalue'] + '</a>' : '',
+              'grantor_contact_id' in data.values[i] ? data.values[i]['api.contact.getvalue'] : '',
+              data.values[i]['grant_date_time'],
+              data.values[i]['grant_date_time'],
+              data.values[i]['start_date'],
+              data.values[i]['start_date'],
+              'end_date'     in data.values[i] ? data.values[i]['end_date']     : '',
+              'end_date'     in data.values[i] ? data.values[i]['end_date']     : '',
+              'description'  in data.values[i] ? data.values[i]['description']  : '',
+              'entity_table' in data.values[i] ? data.values[i]['entity_table'] : '',
+              'entity_id'    in data.values[i] ? data.values[i]['entity_id']    : '',
+              'actions links'
+            ]);
+          }
+        }});
       });
     });
   </script>
