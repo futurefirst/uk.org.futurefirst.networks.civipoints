@@ -71,7 +71,10 @@
       var COL_ENTITY_ID       = 11;
       var COL_ACTIONS         = 12;
 
-      cj('#points-tab-table-{/literal}{$type}{literal}').dataTable({
+      var cid  = '{/literal}{$cid}{literal}';
+      var type = '{/literal}{$type}{literal}';
+
+      cj('#points-tab-table-' + type).dataTable({
         // Order by grant date/time ascending
         'aaSorting':       [[ COL_GRANT_DATE_SORT, 'asc' ]],
         // Try to make it look like Activities and Mailings
@@ -96,47 +99,47 @@
       });
 
       // Set up a datepicker for the effective date field
-      cj('#points-date-{/literal}{$type}{literal}').datepicker({
+      cj('#points-date-' + type).datepicker({
         dateFormat: 'yy-mm-dd'
       });
 
       // When the date in the box is changed, retrieve fresh data
-      cj('#points-date-{/literal}{$type}{literal}').change(function() {
-        var table = cj('#points-tab-table-{/literal}{$type}{literal}').dataTable();
+      cj('#points-date-' + type).change(function() {
+        var table = cj('#points-tab-table-' + type).dataTable();
         var url   = '{/literal}{crmURL p='civicrm/ajax/rest' h=0 q='className=CRM_Points_Page_AJAX&fnName=getEffectiveAjax&json=1'}{literal}';
-        cj('#points-spinner-{/literal}{$type}{literal}').show();
+        cj('#points-spinner-' + type).show();
 
         // Don't seem to have the DataTables fnReloadAjax plugin
         cj.ajax({
           'url':  url,
           'data': {
-            'cid':  {/literal}{$cid}{literal},
-            'type': {/literal}{$type}{literal},
+            'cid':  cid,
+            'type': type,
             'date': cj(this).val()
           },
           'success': function(d) {
             var data = cj.parseJSON(d);
             table.fnClearTable();
             table.fnAddData(data);
-            cj('#points-spinner-{/literal}{$type}{literal}').hide();
+            cj('#points-spinner-' + type).hide();
           }
         });
       });
 
       // Handle the 'Current' button being clicked
-      cj('#points-current-{/literal}{$type}{literal}').click(function() {
-        cj('#points-date-{/literal}{$type}{literal}').val('');
-        cj('#points-date-{/literal}{$type}{literal}').trigger('change');
+      cj('#points-current-' + type).click(function() {
+        cj('#points-date-' + type).val('');
+        cj('#points-date-' + type).trigger('change');
       });
 
       // Handle the 'All' button being clicked
-      cj('#points-all-{/literal}{$type}{literal}').click(function() {
-        cj('#points-date-{/literal}{$type}{literal}').val('all');
-        cj('#points-date-{/literal}{$type}{literal}').trigger('change');
+      cj('#points-all-' + type).click(function() {
+        cj('#points-date-' + type).val('all');
+        cj('#points-date-' + type).trigger('change');
       });
 
       // Trigger an initial load of the current effective points
-      cj('#points-current-{/literal}{$type}{literal}').trigger('click');
+      cj('#points-current-' + type).trigger('click');
     });
   </script>
 {/literal}
