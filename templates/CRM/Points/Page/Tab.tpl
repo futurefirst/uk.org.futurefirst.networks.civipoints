@@ -24,6 +24,7 @@
         <input type="button" id="points-all-{$type}" value="{ts}All{/ts}"/>
         <label for="points-date-{$type}">{ts}Show points as at date:{/ts}</label>
         <input type="text" id="points-date-{$type}" size="10" maxlength="10"/>
+        <img src="{$config->resourceBase}i/loading.gif" alt="{ts}Loading{/ts}" id="points-spinner-{$type}" style="width: 16px; height: 16px; display: none;"/>
       </div>
     </div>
     <br/>
@@ -103,6 +104,7 @@
       cj('#points-date-{/literal}{$type}{literal}').change(function() {
         var table = cj('#points-tab-table-{/literal}{$type}{literal}').dataTable();
         var url   = '{/literal}{crmURL p='civicrm/ajax/rest' h=0 q='className=CRM_Points_Page_AJAX&fnName=getEffectiveAjax&json=1'}{literal}';
+        cj('#points-spinner-{/literal}{$type}{literal}').show();
 
         // Don't seem to have the DataTables fnReloadAjax plugin
         cj.ajax({
@@ -116,6 +118,7 @@
             var data = cj.parseJSON(d);
             table.fnClearTable();
             table.fnAddData(data);
+            cj('#points-spinner-{/literal}{$type}{literal}').hide();
           }
         });
       });
