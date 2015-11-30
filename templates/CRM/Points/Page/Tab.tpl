@@ -134,6 +134,16 @@
           }
         });
       });
+
+      cj('#points-current-{/literal}{$type}{literal}').click(function() {
+        cj('#points-date-{/literal}{$type}{literal}').val('');
+        cj('#points-date-{/literal}{$type}{literal}').trigger('change');
+      });
+
+      cj('#points-all-{/literal}{$type}{literal}').click(function() {
+        cj('#points-date-{/literal}{$type}{literal}').val('all');
+        cj('#points-date-{/literal}{$type}{literal}').trigger('change');
+      });
     });
   </script>
 {/literal}

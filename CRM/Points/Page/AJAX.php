@@ -20,12 +20,11 @@ class CRM_Points_Page_AJAX {
     }
 
     // Get points assignments that are currently in effect.
-    $pointsResult = civicrm_api('Points', 'geteffective', array(
+    $params = array(
       'version'        => 3,
       'sequential'     => 1,
       'contact_id'     => $cid,
       'points_type_id' => $type,
-      'date'           => $date,
       'options'        => array(
         'limit'        => 0,
       ),
@@ -33,7 +32,11 @@ class CRM_Points_Page_AJAX {
         'id'     => '$value.grantor_contact_id',
         'return' => 'sort_name',
       ),
-    ));
+    );
+    if (!empty($date)) {
+      $params['date'] = $date;
+    }
+    $pointsResult = civicrm_api('Points', 'geteffective', $params);
     if (civicrm_error($pointsResult)) {
       CRM_Core_Error::fatal($pointsResult['error_message']);
     }
