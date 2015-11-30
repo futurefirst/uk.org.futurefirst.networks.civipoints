@@ -47,23 +47,7 @@
         </tr>
       </thead>
       <tbody>
-        {foreach from=$points item=rec}
-          <tr>
-            <td>{$rec.points}</td>
-            <td>{$rec.grantor_link}</td>
-            <td>{$rec.grantor_sort_name}</td>   <!-- for sorting, hidden -->
-            <td>{$rec.grant_date_time_show}</td>
-            <td>{$rec.grant_date_time}</td>     <!-- for sorting, hidden -->
-            <td>{$rec.start_date_show}</td>
-            <td>{$rec.start_date}</td>          <!-- for sorting, hidden -->
-            <td>{$rec.end_date_show}</td>
-            <td>{$rec.end_date}</td>            <!-- for sorting, hidden -->
-            <td>{$rec.description}</td>
-            <td>{$rec.entity_table}</td>        <!-- not implemented yet, hidden -->
-            <td>{$rec.entity_id}</td>           <!-- not implemented yet, hidden -->
-            <td>{$rec.links}</td>
-          </tr>
-        {/foreach}
+        <!-- empty to start with, filled by AJAX -->
       </tbody>
     </table>
   </div>
@@ -110,11 +94,12 @@
         ]
       });
 
-      // Handlers for filtering by effective date
+      // Set up a datepicker for the effective date field
       cj('#points-date-{/literal}{$type}{literal}').datepicker({
         dateFormat: 'yy-mm-dd'
       });
 
+      // When the date in the box is changed, retrieve fresh data
       cj('#points-date-{/literal}{$type}{literal}').change(function() {
         var table = cj('#points-tab-table-{/literal}{$type}{literal}').dataTable();
         var url   = '{/literal}{crmURL p='civicrm/ajax/rest' h=0 q='className=CRM_Points_Page_AJAX&fnName=getEffectiveAjax&json=1'}{literal}';
@@ -135,15 +120,20 @@
         });
       });
 
+      // Handle the 'Current' button being clicked
       cj('#points-current-{/literal}{$type}{literal}').click(function() {
         cj('#points-date-{/literal}{$type}{literal}').val('');
         cj('#points-date-{/literal}{$type}{literal}').trigger('change');
       });
 
+      // Handle the 'All' button being clicked
       cj('#points-all-{/literal}{$type}{literal}').click(function() {
         cj('#points-date-{/literal}{$type}{literal}').val('all');
         cj('#points-date-{/literal}{$type}{literal}').trigger('change');
       });
+
+      // Trigger an initial load of the current effective points
+      cj('#points-current-{/literal}{$type}{literal}').trigger('click');
     });
   </script>
 {/literal}
