@@ -12,6 +12,7 @@
         </span>
       </a>
     </div>
+    <br/>
 
     <div class="crm-accordion-wrapper">
       <div class="crm-accordion-header">
@@ -25,6 +26,7 @@
         <input type="text" id="points-date-{$type}" size="10" maxlength="10"/>
       </div>
     </div>
+    <br/>
 
     <table id="points-tab-table-{$type}">
       <thead>
