@@ -115,40 +115,22 @@
 
       cj('#points-date-{/literal}{$type}{literal}').change(function() {
         var table = cj('#points-tab-table-{/literal}{$type}{literal}').dataTable();
+        var url   = '{/literal}{crmURL p='civicrm/ajax/rest' h=0 q='className=CRM_Points_Page_AJAX&fnName=getEffectiveAjax&json=1'}{literal}';
 
-        CRM.api('Points', 'geteffective', {
-          'version':        3,
-          'sequential':     1,
-          'contact_id':     {/literal}{$cid}{literal},
-          'points_type_id': {/literal}{$type}{literal},
-          'date':           cj(this).val().replace(/-/g, ''), // 2015-01-01 to 20150101
-          'options':        { 'limit': 0 },
-          'api.contact.getvalue': {
-            'id':     '$value.grantor_contact_id',
-            'return': 'sort_name'
+        // Don't seem to have the DataTables fnReloadAjax plugin
+        cj.ajax({
+          'url':  url,
+          'data': {
+            'cid':  {/literal}{$cid}{literal},
+            'type': {/literal}{$type}{literal},
+            'date': cj(this).val()
+          },
+          'success': function(d) {
+            var data = cj.parseJSON(d);
+            table.fnClearTable();
+            table.fnAddData(data);
           }
-
-        }, { 'success': function(data) {
-          console.log(data);
-          table.fnClearTable(); // Don't seem to have the fnReloadAjax plugin
-          for (var i = 0; i < data.values.length; i++) {
-            table.fnAddData([
-              data.values[i]['points'],
-              'grantor_contact_id' in data.values[i] ? '<a href="http://www.example.com">' + data.values[i]['api.contact.getvalue'] + '</a>' : '',
-              'grantor_contact_id' in data.values[i] ? data.values[i]['api.contact.getvalue'] : '',
-              data.values[i]['grant_date_time'],
-              data.values[i]['grant_date_time'],
-              data.values[i]['start_date'],
-              data.values[i]['start_date'],
-              'end_date'     in data.values[i] ? data.values[i]['end_date']     : '',
-              'end_date'     in data.values[i] ? data.values[i]['end_date']     : '',
-              'description'  in data.values[i] ? data.values[i]['description']  : '',
-              'entity_table' in data.values[i] ? data.values[i]['entity_table'] : '',
-              'entity_id'    in data.values[i] ? data.values[i]['entity_id']    : '',
-              'actions links'
-            ]);
-          }
-        }});
+        });
       });
     });
   </script>
