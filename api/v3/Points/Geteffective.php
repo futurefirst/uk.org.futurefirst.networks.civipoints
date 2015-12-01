@@ -28,6 +28,12 @@ function _civicrm_api3_points_geteffective_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_points_geteffective($params) {
-  $results = CRM_Points_BAO_Points::getEffective($params);
-  return civicrm_api3_create_success($results, $params, 'Points', 'Geteffective');
+  if ($params['date'] == 'all') {
+    unset($params['date']);
+    return civicrm_api3_points_get($params);
+  }
+  else {
+    $results = CRM_Points_BAO_Points::getEffective($params);
+    return civicrm_api3_create_success($results, $params, 'Points', 'Geteffective');
+  }
 }

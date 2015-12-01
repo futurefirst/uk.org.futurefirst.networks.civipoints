@@ -12,6 +12,22 @@
         </span>
       </a>
     </div>
+    <br/>
+
+    <div class="crm-accordion-wrapper">
+      <div class="crm-accordion-header">
+        {ts}Filter by effective date{/ts}
+      </div>
+      <div class="crm-accordion-body">
+        &nbsp;
+        <input type="button" id="points-current-{$type}" value="{ts}Current{/ts}"/>
+        <input type="button" id="points-all-{$type}" value="{ts}All{/ts}"/>
+        <label for="points-date-{$type}">{ts}Show points as at date:{/ts}</label>
+        <input type="text" id="points-date-{$type}" size="10" maxlength="10"/>
+        <img src="{$config->resourceBase}i/loading.gif" alt="{ts}Loading{/ts}" id="points-spinner-{$type}" style="width: 16px; height: 16px; display: none;"/>
+      </div>
+    </div>
+    <br/>
 
     <table id="points-tab-table-{$type}">
       <thead>
@@ -32,23 +48,7 @@
         </tr>
       </thead>
       <tbody>
-        {foreach from=$points item=rec}
-          <tr>
-            <td>{$rec.points}</td>
-            <td>{$rec.grantor_link}</td>
-            <td>{$rec.grantor_sort_name}</td>   <!-- for sorting, hidden -->
-            <td>{$rec.grant_date_time_show}</td>
-            <td>{$rec.grant_date_time}</td>     <!-- for sorting, hidden -->
-            <td>{$rec.start_date_show}</td>
-            <td>{$rec.start_date}</td>          <!-- for sorting, hidden -->
-            <td>{$rec.end_date_show}</td>
-            <td>{$rec.end_date}</td>            <!-- for sorting, hidden -->
-            <td>{$rec.description}</td>
-            <td>{$rec.entity_table}</td>        <!-- not implemented yet, hidden -->
-            <td>{$rec.entity_id}</td>           <!-- not implemented yet, hidden -->
-            <td>{$rec.links}</td>
-          </tr>
-        {/foreach}
+        <!-- empty to start with, filled by AJAX -->
       </tbody>
     </table>
   </div>
@@ -71,7 +71,10 @@
       var COL_ENTITY_ID       = 11;
       var COL_ACTIONS         = 12;
 
-      cj('#points-tab-table-{/literal}{$type}{literal}').dataTable({
+      var cid  = '{/literal}{$cid}{literal}';
+      var type = '{/literal}{$type}{literal}';
+
+      cj('#points-tab-table-' + type).dataTable({
         // Order by grant date/time ascending
         'aaSorting':       [[ COL_GRANT_DATE_SORT, 'asc' ]],
         // Try to make it look like Activities and Mailings
@@ -94,6 +97,49 @@
           { 'aTargets': [ COL_ACTIONS ], 'bSortable': false }
         ]
       });
+
+      // Set up a datepicker for the effective date field
+      cj('#points-date-' + type).datepicker({
+        dateFormat: 'yy-mm-dd'
+      });
+
+      // When the date in the box is changed, retrieve fresh data
+      cj('#points-date-' + type).change(function() {
+        var table = cj('#points-tab-table-' + type).dataTable();
+        var url   = '{/literal}{crmURL p='civicrm/ajax/rest' h=0 q='className=CRM_Points_Page_AJAX&fnName=getEffectiveAjax&json=1'}{literal}';
+        cj('#points-spinner-' + type).show();
+
+        // Don't seem to have the DataTables fnReloadAjax plugin
+        cj.ajax({
+          'url':  url,
+          'data': {
+            'cid':  cid,
+            'type': type,
+            'date': cj(this).val()
+          },
+          'success': function(d) {
+            var data = cj.parseJSON(d);
+            table.fnClearTable();
+            table.fnAddData(data);
+            cj('#points-spinner-' + type).hide();
+          }
+        });
+      });
+
+      // Handle the 'Current' button being clicked
+      cj('#points-current-' + type).click(function() {
+        cj('#points-date-' + type).val('');
+        cj('#points-date-' + type).trigger('change');
+      });
+
+      // Handle the 'All' button being clicked
+      cj('#points-all-' + type).click(function() {
+        cj('#points-date-' + type).val('all');
+        cj('#points-date-' + type).trigger('change');
+      });
+
+      // Trigger an initial load of the current effective points
+      cj('#points-current-' + type).trigger('click');
     });
   </script>
 {/literal}
