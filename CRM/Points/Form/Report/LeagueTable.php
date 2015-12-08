@@ -8,8 +8,26 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
     $this->contactSubtype   = CRM_Contact_BAO_ContactType::subTypePairs(NULL, FALSE, NULL);
     $this->membershipType   = CRM_Member_PseudoConstant::membershipType();
     $this->membershipStatus = CRM_Member_PseudoConstant::membershipStatus(NULL, NULL, 'label');
+    $this->pointsType       = CRM_Core_OptionGroup::values('points_type');
+    $this->_columns         = array();
 
-    $this->_columns = array(
+    // Generate options for each points type
+    foreach ($this->pointsType as $ptid => $ptlabel) {
+      $ptid = CRM_Core_DAO::escapeString($ptid);
+      $this->_columns['civicrm_points_' . $ptid] = array();
+      $this->_columns['civicrm_points_' . $ptid]['fields']    =
+      $this->_columns['civicrm_points_' . $ptid]['filters']   =
+      $this->_columns['civicrm_points_' . $ptid]['order_bys'] =
+      array(
+        'points_' . $ptid => array(
+          'title' => $ptlabel,
+          'type'  => CRM_Utils_Type::T_INT,
+        ),
+      );
+      $this->_columns['civicrm_points_' . $ptid]['grouping'] = 'points_fields';
+    }
+
+    $this->_columns += array(
       'civicrm_contact' => array(
         'dao'    => 'CRM_Contact_DAO_Contact',
         'fields' => array(
@@ -134,7 +152,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
              FROM `civicrm_contact` AS `{$this->_aliases['civicrm_contact']}`
                   {$this->_aclFrom}
 
-       INNER JOIN `civicrm_membership` AS `{$this->_aliases['civicrm_membership']}`
+        LEFT JOIN `civicrm_membership` AS `{$this->_aliases['civicrm_membership']}`
                ON `{$this->_aliases['civicrm_membership']}`.`contact_id`  = `{$this->_aliases['civicrm_contact']}`.`id`
               AND `{$this->_aliases['civicrm_membership']}`.`is_test`    IS NOT TRUE
     ";
@@ -152,6 +170,27 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
         LEFT JOIN `civicrm_email` AS `{$this->_aliases['civicrm_email']}`
                ON `{$this->_aliases['civicrm_email']}`.`contact_id`  = `{$this->_aliases['civicrm_contact']}`.`id`
               AND `{$this->_aliases['civicrm_email']}`.`is_primary` IS TRUE
+      ";
+    }
+
+    $date = CRM_Utils_Date::currentDBDate();
+    $date = CRM_Core_DAO::escapeString($date);
+    foreach ($this->pointsType as $ptid => $ptlabel) {
+      $ptid = CRM_Core_DAO::escapeString($ptid);
+      $this->_from .= "
+        LEFT JOIN (
+           SELECT   `contact_id`,
+                    SUM(`points`)    AS `points_{$ptid}`
+             FROM   `civicrm_points`
+            WHERE   `points_type_id`  = '{$ptid}'
+              AND   `start_date`     <= '{$date}'
+              AND   (
+                      `end_date`     >= '{$date}'
+               OR     `end_date`     IS NULL
+                    )
+         GROUP BY   `contact_id`
+                  ) AS `{$this->_aliases['civicrm_points_' . $ptid]}`
+               ON `{$this->_aliases['civicrm_points_' . $ptid]}`.`contact_id` = `{$this->_aliases['civicrm_contact']}`.`id`
       ";
     }
   }
