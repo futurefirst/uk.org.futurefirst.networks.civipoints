@@ -20,11 +20,11 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
       $this->_columns['civicrm_points_' . $ptid]['order_bys'] =
       array(
         'points_' . $ptid => array(
-          'title' => $ptlabel,
+          'title' => ts('Points (%1)', array(1 => $ptlabel)),
           'type'  => CRM_Utils_Type::T_INT,
         ),
       );
-      $this->_columns['civicrm_points_' . $ptid]['grouping'] = 'points_fields';
+      $this->_columns['civicrm_points_' . $ptid]['grouping'] = 'points-fields';
     }
 
     $this->_columns += array(
