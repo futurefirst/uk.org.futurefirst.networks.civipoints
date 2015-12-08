@@ -287,7 +287,7 @@ class CRM_Points_DAO_Points extends CRM_Core_DAO {
    * @access public
    * return array
    */
-  function &import($prefix = false) {
+  static function &import($prefix = false) {
     if (!(self::$_import)) {
       self::$_import = array();
       $fields = self::fields();
@@ -311,7 +311,7 @@ class CRM_Points_DAO_Points extends CRM_Core_DAO {
    * @access public
    * return array
    */
-  function &export($prefix = false) {
+  static function &export($prefix = false) {
     if (!(self::$_export)) {
       self::$_export = array();
       $fields = self::fields();
