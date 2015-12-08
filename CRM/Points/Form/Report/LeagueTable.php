@@ -148,6 +148,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
   }
 
   function from() {
+    // Basic contact details, membership optional
     $this->_from = "
              FROM `civicrm_contact` AS `{$this->_aliases['civicrm_contact']}`
                   {$this->_aclFrom}
@@ -157,6 +158,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
               AND `{$this->_aliases['civicrm_membership']}`.`is_test`    IS NOT TRUE
     ";
 
+    // Address, if needed
     if ($this->_addressField) {
       $this->_from .= "
         LEFT JOIN `civicrm_address` AS `{$this->_aliases['civicrm_address']}`
@@ -165,6 +167,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
       ";
     }
 
+    // E-mail, if needed
     if ($this->_emailField) {
       $this->_from .= "
         LEFT JOIN `civicrm_email` AS `{$this->_aliases['civicrm_email']}`
@@ -173,6 +176,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
       ";
     }
 
+    // Generate joins for each points type, inner query based on CRM_Points_BAO_Points::getSum
     $date = CRM_Utils_Date::currentDBDate();
     $date = CRM_Core_DAO::escapeString($date);
     foreach ($this->pointsType as $ptid => $ptlabel) {
