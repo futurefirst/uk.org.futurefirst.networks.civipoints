@@ -243,9 +243,9 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
    * @param boolean $applyLimit Limit rows returned for pagination
    * @return string
    */
-  function buildQuery($applyLimit = TRUE) {
-    $sql = parent::buildQuery($applyLimit);
-    echo "<div><pre>$sql</pre></div>\n";
-    return $sql;
-  }
+//  function buildQuery($applyLimit = TRUE) {
+//    $sql = parent::buildQuery($applyLimit);
+//    echo "<div><pre>$sql</pre></div>\n";
+//    return $sql;
+//  }
 }
