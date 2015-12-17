@@ -120,7 +120,9 @@
           'success': function(d) {
             var data = cj.parseJSON(d);
             table.fnClearTable();
-            table.fnAddData(data);
+            if (data.length > 0) {
+              table.fnAddData(data);
+            }
             cj('#points-spinner-' + type).hide();
           }
         });
