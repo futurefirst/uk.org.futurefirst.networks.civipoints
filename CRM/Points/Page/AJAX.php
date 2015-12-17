@@ -47,23 +47,32 @@ class CRM_Points_Page_AJAX {
       $result = array();
       $result[] = $points['points'];
 
-      $grantor_url = CRM_Utils_System::url('civicrm/contact/view', array(
-        'reset' => 1,
-        'cid'   => $points['grantor_contact_id'],
-      ));
-      $result[] = "<a href='{$grantor_url}' title='" . ts('View Contact') . "'>{$points['api.contact.getvalue']}</a>";
-      $result[] = $points['api.contact.getvalue'];
+      if (CRM_Utils_Array::value('grantor_contact_id', $points)) {
+        $grantor_url = CRM_Utils_System::url('civicrm/contact/view', array(
+          'reset' => 1,
+          'cid'   => $points['grantor_contact_id'],
+        ));
+        $result[] = "<a href='{$grantor_url}' title='" . ts('View Contact') . "'>{$points['api.contact.getvalue']}</a>";
+        $result[] = $points['api.contact.getvalue'];
+      }
+      else {
+        $result[] = '<em>' . ts('Unknown') . '</em>';
+        $result[] = '';
+      }
 
-      $result[] = CRM_Utils_Date::customFormat($points['grant_date_time']);
-      $result[] = $points['grant_date_time'];
-      $result[] = CRM_Utils_Date::customFormat($points['start_date']);
-      $result[] = $points['start_date'];
-      $result[] = CRM_Utils_Date::customFormat($points['end_date']);
-      $result[] = $points['end_date'];
+      $grant_date_time = CRM_Utils_Array::value('grant_date_time', $points);
+      $start_date      = CRM_Utils_Array::value('start_date',      $points);
+      $end_date        = CRM_Utils_Array::value('end_date',        $points);
+      $result[] = CRM_Utils_Date::customFormat($grant_date_time);
+      $result[] = $grant_date_time;
+      $result[] = CRM_Utils_Date::customFormat($start_date);
+      $result[] = $start_date;
+      $result[] = CRM_Utils_Date::customFormat($end_date);
+      $result[] = $end_date;
 
-      $result[] = $points['description'];
-      $result[] = $points['entity_table'];
-      $result[] = $points['entity_id'];
+      $result[] = CRM_Utils_Array::value('description',  $points);
+      $result[] = CRM_Utils_Array::value('entity_table', $points);
+      $result[] = CRM_Utils_Array::value('entity_id',    $points);
 
       // Add actions links
       $result[] = CRM_Core_Action::formLink(
