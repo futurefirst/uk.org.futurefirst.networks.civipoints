@@ -15,6 +15,11 @@
         <div class="content">{$form.description.html}</div>
         <div class="clear"></div>
     </div>
+    <div class="crm-section">
+        <div class="label">{$form.note_end_date.label}</div>
+        <div class="content">{$form.note_end_date.html}</div>
+        <div class="clear"></div>
+    </div>
 </div>
 <div class="crm-submit-buttons">
     {include file="CRM/common/formButtons.tpl" location="bottom"}

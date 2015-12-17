@@ -67,6 +67,7 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
     $this->add('text',   'points',         ts('Points'),      NULL,                   TRUE);
     $this->add('select', 'points_type_id', ts('of type'),     self::getPointsTypes(), TRUE);
     $this->add('text',   'description',    ts('Description'));
+    $this->add('static', 'note_end_date',  ts('Note'),        ts('Specifying an end date on points granted by a CiviRule is not yet implemented. These points will not expire.'));
 
     $this->addButtons(array(
       array('type' => 'next',   'name' => ts('Save'),   'isDefault' => TRUE),
