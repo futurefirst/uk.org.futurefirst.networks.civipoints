@@ -18,4 +18,10 @@
     <title>Delete</title>
     <access_arguments>access CiviCRM,edit all contacts</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirules/actions/points</path>
+    <page_callback>CRM_Points_Form_CivirulesAction</page_callback>
+    <title>CiviPoints API (CiviRules action)</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
