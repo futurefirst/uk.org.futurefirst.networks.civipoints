@@ -209,13 +209,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
     foreach ($rows as &$row) {
       // Format the contact subtypes field for display
       if (CRM_Utils_Array::value('civicrm_contact_contact_sub_type', $row)) {
-        $subtypes  = $this->contactSubtype;
-        $splitvals = CRM_Utils_Array::explodePadded($row['civicrm_contact_contact_sub_type']);
-        foreach ($splitvals as &$splitval) {
-          $splitval = $subtypes[$splitval];
-        }
-        natcasesort($splitvals);
-        $row['civicrm_contact_contact_sub_type'] = implode(', ', $splitvals);
+        $row['civicrm_contact_contact_sub_type'] = self::formatSubtypes($row['civicrm_contact_contact_sub_type']);
       }
 
       // Format the membership type and status fields for display
@@ -239,6 +233,33 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
         $row['civicrm_contact_sort_name_hover'] = ts('View Contact');
       }
     }
+  }
+
+  /**
+   * Format a separated string of contact subtype names (as stored in the database)
+   * as a sorted, comma-separated string of contact subtype labels (for human reading)
+   *
+   * @param string $contact_sub_type
+   * @return string
+   */
+  public static function formatSubtypes($contact_sub_type) {
+    if (empty($contact_sub_type)) {
+      return NULL;
+    }
+    $subtypes_map = CRM_Contact_BAO_ContactType::contactTypePairs();
+    $subtypes     = CRM_Utils_Array::explodePadded($contact_sub_type);
+
+    foreach ($subtypes as $key => $subtype) {
+      if (empty($subtype)) {
+        unset($subtypes[$key]);
+      }
+      else {
+        $subtypes[$key] = $subtypes_map[$subtype];
+      }
+    }
+
+    natcasesort($subtypes);
+    return implode(', ', $subtypes);
   }
 
   /**
