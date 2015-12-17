@@ -140,6 +140,7 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
   public function postProcess() {
     $data['points']         = $this->_submitValues['points'];
     $data['points_type_id'] = $this->_submitValues['points_type_id'];
+    $data['description']    = $this->_submitValues['description'];
 
     $ruleAction = new CRM_Civirules_BAO_RuleAction();
     $ruleAction->id = $this->ruleActionId;
