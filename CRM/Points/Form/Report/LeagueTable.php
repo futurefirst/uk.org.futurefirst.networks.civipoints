@@ -149,6 +149,10 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
 
   function from() {
     // Basic contact details, membership optional
+    // Note: In order that the membership shown is the most recent one,
+    // I'm using the 'LEFT JOIN' solution to the common problem
+    // 'The Rows Holding the Group-wise Maximum of a Certain Column',
+    // see http://dev.mysql.com/doc/refman/5.0/en/example-maximum-column-group-row.html
     $this->_from = "
              FROM `civicrm_contact` AS `{$this->_aliases['civicrm_contact']}`
                   {$this->_aclFrom}
@@ -156,6 +160,9 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
         LEFT JOIN `civicrm_membership` AS `{$this->_aliases['civicrm_membership']}`
                ON `{$this->_aliases['civicrm_membership']}`.`contact_id`  = `{$this->_aliases['civicrm_contact']}`.`id`
               AND `{$this->_aliases['civicrm_membership']}`.`is_test`    IS NOT TRUE
+        LEFT JOIN `civicrm_membership` AS `cm2`
+               ON `cm2`.`contact_id`    = `{$this->_aliases['civicrm_membership']}`.`contact_id`
+              AND `cm2`.`end_date`      > `{$this->_aliases['civicrm_membership']}`.`end_date`
     ";
 
     // Address, if needed
@@ -202,6 +209,7 @@ class CRM_Points_Form_Report_LeagueTable extends CRM_Report_Form {
   function where() {
     // Always exclude deleted (trashed) contacts
     $this->_whereClauses[] = "(`{$this->_aliases['civicrm_contact']}`.`is_deleted` IS NOT TRUE)";
+    $this->_whereClauses[] = "(`cm2`.`id` IS NULL)";
     parent::where();
   }
 
