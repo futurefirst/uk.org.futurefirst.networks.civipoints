@@ -105,9 +105,9 @@ class CRM_Points_Form_Search_Points extends CRM_Contact_Form_Search_Custom_Base 
     $points_type_id = CRM_Core_DAO::escapeString(CRM_Utils_Array::value('points_type_id', $this->_formValues));
     $points_at_date = CRM_Utils_Array::value('points_at_date', $this->_formValues);
     if (
-      empty(CRM_Utils_Array::value('Y', $points_at_date)) &&
-      empty(CRM_Utils_Array::value('m', $points_at_date)) &&
-      empty(CRM_Utils_Array::value('d', $points_at_date))
+      empty($points_at_date['Y']) &&
+      empty($points_at_date['m']) &&
+      empty($points_at_date['d'])
     ) {
       $points_at_date = "NOW()";
     }
