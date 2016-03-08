@@ -5,7 +5,7 @@ An extension for CiviCRM. Allows points to be allocated to contacts.
 Install in the usual ways, either from the CiviCRM extensions repository or
 by downloading directly from GitHub. If you download a snapshot you may need
 to rename the extension's directory to the extension's key
-(uk.org.futurefirst.networks.civipoints). If you intend to use CiviPoints with
+(`uk.org.futurefirst.networks.civipoints`). If you intend to use CiviPoints with
 CiviRules, install CiviRules first.
 
 Create your points types in the 'Points Type' option group. It is suggested
@@ -20,24 +20,26 @@ or any other date you choose
 * Report template and custom search- track your most engaged contacts by
 creating league tables and smart groups
 * Create multiple points types to track multiple programmes
-* CiviRules integration- as an action, to grant points automatically in
-response to some trigger. CiviRules integration as a trigger is coming soon.
+* CiviRules integration: As an action, to *grant points automatically* in
+response to some trigger. As a condition, so some action can be taken in
+response to some trigger *if the contact has the right number of points*.
 
 ### Links
-* http://www.futurefirst.org.uk/
-* https://github.com/futurefirst/uk.org.futurefirst.networks.civipoints/wiki
-* https://civicrm.org/extensions/civirules
-* http://civicrm.stackexchange.com/questions/7319
+* <http://www.futurefirst.org.uk/>
+* <https://github.com/futurefirst/uk.org.futurefirst.networks.civipoints/wiki>
+* <https://civicrm.org/extensions/civirules>
+* <http://civicrm.stackexchange.com/questions/7319>
 
 ### Licensing
-Copyright (C)2015 Future First. Future First Alumni Limited (formerly known as
-The Camden Future First Network Limited), operating under the public name
-'Future First', is a registered charity in England and Wales (1135638) and
-Scotland (SC043973).
+Copyright (C)2015-2016 [Future First](http://www.futurefirst.org.uk/).
+Future First Alumni Limited (formerly known as The Camden Future First Network
+Limited), operating under the public name 'Future First', is a registered
+charity in England and Wales (1135638) and Scotland (SC043973).
 
-Maintained by David Knoll <david@futurefirst.org.uk>
+Maintained by [David Knoll](mailto:david@futurefirst.org.uk).
 
-Some code in this extension is based on CiviRules, which is produced by CiviCooP.
+Some code in this extension is based on CiviRules, which is produced by
+[CiviCooP](https://www.civicoop.org/).
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
