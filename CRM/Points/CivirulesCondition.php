@@ -7,20 +7,12 @@ class CRM_Points_CivirulesCondition extends CRM_CivirulesConditions_Generic_Valu
   /**
    * Returns the number of points the contact has
    *
-   * TODO: Only checks points as at the time of the check,
-   * only checks the default points type
-   *
    * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return boolean|int FALSE on error, or an integer sum of points in effect
    */
   protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $cid = $triggerData->getContactId();
-    $points_type_id = civicrm_api('OptionValue', 'getvalue', array(
-      'version'           => 3,
-      'option_group_name' => 'points_type',
-      'is_default'        => 1,
-      'return'            => 'value',
-    ));
+    $points_type_id = $this->conditionParams['points_type_id'];
 
     $points = civicrm_api('Points', 'getsum', array(
       'version'        => 3,
@@ -43,34 +35,45 @@ class CRM_Points_CivirulesCondition extends CRM_CivirulesConditions_Generic_Valu
   /**
    * Returns user-friendly text explaining the condition for the
    * 'CiviRules Update Rule' screen,
-   * eg. 'Contact has at least 5 points' rather than '>= 5'
+   * eg. 'Contact has at least 5 Default Type points' rather than '>= 5'
    *
    * @return string
    */
   public function userFriendlyConditionParams() {
     switch ($this->getOperator()) {
       case '=':
-        $label = 'Contact has exactly %1 points';
+        $label = 'Contact has exactly %1 %2 points';
         break;
       case '>':
-        $label = 'Contact has more than %1 points';
+        $label = 'Contact has more than %1 %2 points';
         break;
       case '<':
-        $label = 'Contact has less than %1 points';
+        $label = 'Contact has less than %1 %2 points';
         break;
       case '>=':
-        $label = 'Contact has at least %1 points';
+        $label = 'Contact has at least %1 %2 points';
         break;
       case '<=':
-        $label = 'Contact has at most %1 points';
+        $label = 'Contact has at most %1 %2 points';
         break;
       case '!=':
-        $label = 'Contact does not have exactly %1 points';
+        $label = 'Contact does not have exactly %1 %2 points';
         break;
       default:
         return '';
     }
-    return ts($label, array(1 => $this->getComparisonValue()));
+
+    $type = civicrm_api('OptionValue', 'getvalue', array(
+      'version'           => 3,
+      'option_group_name' => 'points_type',
+      'value'             => $this->conditionParams['points_type_id'],
+      'return'            => 'label',
+    ));
+
+    return ts($label, array(
+      1 => $this->getComparisonValue(),
+      2 => $type,
+    ));
   }
 
   /**
@@ -87,6 +90,20 @@ class CRM_Points_CivirulesCondition extends CRM_CivirulesConditions_Generic_Valu
       '<'  => ts('Less than this many points'),
       '>=' => ts('At least this many points'),
       '<=' => ts('At most this many points'),
+    );
+  }
+
+  /**
+   * Returns the URL of the form to add extra parameters to the condition,
+   * eg. the points type we're interested in
+   *
+   * @param int $ruleConditionId
+   * @return string
+   */
+  public function getExtraDataInputUrl($ruleConditionId) {
+    return CRM_Utils_System::url(
+      'civicrm/civirule/form/condition/points',
+      array('rule_condition_id' => $ruleConditionId)
     );
   }
 }
