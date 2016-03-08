@@ -24,4 +24,10 @@
     <title>CiviPoints API (CiviRules action)</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/condition/points</path>
+    <page_callback>CRM_Points_Form_CivirulesCondition</page_callback>
+    <title>CiviPoints (CiviRules condition)</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
