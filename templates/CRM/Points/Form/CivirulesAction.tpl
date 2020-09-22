@@ -16,6 +16,14 @@
         <div class="clear"></div>
     </div>
     <div class="crm-section">
+        <div class="label">{$form.expiration_interval.label}</div>
+        <div class="content">
+            <span>{$form.expiration_interval.html}</span>
+            <span>{$form.expiration_unit.html}</span>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="crm-section">
         <div class="label">{$form.note_end_date.label}</div>
         <div class="content">{$form.note_end_date.html}</div>
         <div class="clear"></div>

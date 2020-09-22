@@ -12,6 +12,14 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
   protected $ruleAction;
   protected $action;
 
+  public $fieldNames = array(
+    'points' => 'points',
+    'points_type_id' => 'points_type_id',
+    'description' => 'description',
+    'expiration_interval' => 'expiration_interval',
+    'expiration_unit' => 'expiration_unit',
+  );
+
   /**
    * Overridden parent method to do pre-form building processing
    *
@@ -64,10 +72,20 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
     $this->setFormTitle();
     $this->add('hidden', 'rule_action_id');
 
-    $this->add('text',   'points',         ts('Points'),      NULL,                   TRUE);
-    $this->add('select', 'points_type_id', ts('of type'),     self::getPointsTypes(), TRUE);
-    $this->add('text',   'description',    ts('Description'));
-    $this->add('static', 'note_end_date',  ts('Note'),        ts('Specifying an end date on points granted by a CiviRule is not yet implemented. These points will not expire.'));
+    $this->add('text',   'points',              ts('Points'),         NULL,                   TRUE);
+    $this->add('select', 'points_type_id',      ts('of type'),        self::getPointsTypes(), TRUE);
+    $this->add('text',   'description',         ts('Description'));
+    $this->add('number', 'expiration_interval', ts('Expiring after'), ['class' => 'six', 'min' => 0]);
+    
+    $this->freqUnits = CRM_Core_SelectValues::getRecurringFrequencyUnits();
+    unset($this->freqUnits['hour']);
+    foreach ($this->freqUnits as $val => $label) {
+      $freqUnitsDisplay[$val] = ts('%1(s)', [1 => $label]);
+    }
+    $this->add('select', 'expiration_unit', ts('time units'), $freqUnitsDisplay, TRUE);
+
+    //$this->add('datepicker', 'expiration_date', ts('Expiration Date'), [], FALSE, ['time' => FALSE]);
+    $this->add('static', 'note_end_date',  ts('Note'),        ts('If you enter an expiration time above, the points will expire the specified amount of time after their start date. Specifying a static end date on points granted by a CiviRule is not yet implemented.'));
 
     $this->addButtons(array(
       array('type' => 'next',   'name' => ts('Save'),   'isDefault' => TRUE),
@@ -89,13 +107,12 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
       $data = unserialize($this->ruleAction->action_params);
     }
 
-    if (!empty($data['points'])) {
-      $defaultValues['points'] = $data['points'];
+    foreach ($this->fieldNames as $fieldName) {
+      if (!empty($data[$fieldName])) {
+        $defaultValues[$fieldName] = $data[$fieldName];
+      }        
     }
-    if (!empty($data['points_type_id'])) {
-      $defaultValues['points_type_id'] = $data['points_type_id'];
-    }
-    else {
+    if (empty($data['points_type_id'])) {
       $defaultValues['points_type_id'] = civicrm_api('OptionValue', 'getvalue', array(
         'version'           => 3,
         'option_group_name' => 'points_type',
@@ -103,9 +120,6 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
         'is_default'        => 1,
         'return'            => 'value',
       ));
-    }
-    if (!empty($data['description'])) {
-      $defaultValues['description'] = $data['description'];
     }
 
     return $defaultValues;
@@ -139,9 +153,7 @@ class CRM_Points_Form_CivirulesAction extends CRM_Core_Form {
    * @access public
    */
   public function postProcess() {
-    $data['points']         = $this->_submitValues['points'];
-    $data['points_type_id'] = $this->_submitValues['points_type_id'];
-    $data['description']    = $this->_submitValues['description'];
+    $data = array_intersect_key($this->_submitValues, $this->fieldNames);
 
     $ruleAction = new CRM_Civirules_BAO_RuleAction();
     $ruleAction->id = $this->ruleActionId;
