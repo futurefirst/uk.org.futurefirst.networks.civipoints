@@ -188,48 +188,51 @@ function civipoints_civicrm_alterAPIPermissions($entity, $action, &$params, &$pe
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tabs
  */
-function civipoints_civicrm_tabs(&$tabs, $contactID) {
-  // One tab for each type of points
-  $pointsTypes = CRM_Core_OptionGroup::values('points_type');
+function civipoints_civicrm_tabset($tabsetName, &$tabs, $context) {
+  if ($tabsetName === 'civicrm/contact/view' && !empty($context['contact_id'])) {
+    $contactID = $context['contact_id'];
+    // One tab for each type of points
+    $pointsTypes = CRM_Core_OptionGroup::values('points_type');
 
-  foreach ($pointsTypes as $pointsTypeId => $pointsTypeLabel) {
-    // Has this contact ever had any points of this type?
-    // If not, don't bother showing the tab.
-    // Note, this costs a lookup per active points type per contact page view, even if no results.
-    $countRecs = civicrm_api('Points', 'getcount', array(
-      'version'        => 3,
-      'contact_id'     => $contactID,
-      'points_type_id' => $pointsTypeId,
-    ));
-    if (!$countRecs) {
-      continue;
+    foreach ($pointsTypes as $pointsTypeId => $pointsTypeLabel) {
+      // Has this contact ever had any points of this type?
+      // If not, don't bother showing the tab.
+      // Note, this costs a lookup per active points type per contact page view, even if no results.
+      $countRecs = civicrm_api('Points', 'getcount', array(
+        'version'        => 3,
+        'contact_id'     => $contactID,
+        'points_type_id' => $pointsTypeId,
+      ));
+      if (!$countRecs) {
+        continue;
+      }
+
+      // Display the current points total in the tab heading
+      $sum = civicrm_api('Points', 'getsum', array(
+        'version'        => 3,
+        'contact_id'     => $contactID,
+        'points_type_id' => $pointsTypeId,
+      ));
+      if ($sum === NULL) {
+        $sum = 0;
+      }
+
+      // Page URL for a breakdown of points granted to that contact
+      $url = CRM_Utils_System::url('civicrm/points/tab', array(
+        'snippet' => 1,
+        'cid'     => $contactID,
+        'type'    => $pointsTypeId,
+      ));
+
+      // Add a tab for this points type
+      $tabs[] = array(
+        'id'     => 'civipoints_' . $pointsTypeId,
+        'url'    => $url,
+        'title'  => ts('Points (%1)', array(1 => $pointsTypeLabel)),
+        'weight' => _civipoints_maxweight($tabs) + 5,
+        'count'  => $sum,
+      );
     }
-
-    // Display the current points total in the tab heading
-    $sum = civicrm_api('Points', 'getsum', array(
-      'version'        => 3,
-      'contact_id'     => $contactID,
-      'points_type_id' => $pointsTypeId,
-    ));
-    if ($sum === NULL) {
-      $sum = 0;
-    }
-
-    // Page URL for a breakdown of points granted to that contact
-    $url = CRM_Utils_System::url('civicrm/points/tab', array(
-      'snippet' => 1,
-      'cid'     => $contactID,
-      'type'    => $pointsTypeId,
-    ));
-
-    // Add a tab for this points type
-    $tabs[] = array(
-      'id'     => 'civipoints_' . $pointsTypeId,
-      'url'    => $url,
-      'title'  => ts('Points (%1)', array(1 => $pointsTypeLabel)),
-      'weight' => _civipoints_maxweight($tabs) + 5,
-      'count'  => $sum,
-    );
   }
 }
 
