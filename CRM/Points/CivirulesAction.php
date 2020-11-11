@@ -1,4 +1,7 @@
 <?php
+
+use CRM_Points_ExtensionUtil as E;
+
 /**
  * Class for CiviRule action Points
  *
@@ -39,8 +42,15 @@ class CRM_Points_CivirulesAction extends CRM_CivirulesActions_Generic_Api {
    * @access protected
    */
   protected function alterApiParameters($parameters, CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    //this method could be overridden in subclasses to alter parameters to meet certain criteria
     $parameters['contact_id'] = $triggerData->getContactId();
+
+    $expiration_interval = $parameters['expiration_interval'] ?? FALSE;
+    $expiration_unit = $parameters['expiration_unit'] ?? FALSE;
+    if ($expiration_interval && $expiration_unit) {
+      $date = new DateTime();
+      $date->add(new DateInterval('P2Y'));
+      $parameters['end_date'] = $date->format('Y-m-d');
+    }
 
     return $parameters;
   }
@@ -67,14 +77,29 @@ class CRM_Points_CivirulesAction extends CRM_CivirulesActions_Generic_Api {
   public function userFriendlyConditionParams() {
     $params = $this->getActionParameters();
 
-    return ts('Grant %1 %2 points to the contact', array(
-      1 => $params['points'],
-      2 => civicrm_api('OptionValue', 'getvalue', array(
-        'version'           => 3,
-        'value'             => $params['points_type_id'],
-        'option_group_name' => 'points_type',
-        'return'            => 'label',
-      )),
-    ));
+    $points = $params['points'];
+    $type = civicrm_api('OptionValue', 'getvalue', [
+      'version'           => 3,
+      'value'             => $params['points_type_id'],
+      'option_group_name' => 'points_type',
+      'return'            => 'label']);
+    $expiration_interval = $params['expiration_interval'] ?? FALSE;
+    $expiration_unit = $params['expiration_unit'] ?? FALSE;
+
+    $out = E::ts('Grant 1 %2 point to the contact', [
+      'plural' => 'Grant %count %2 points to the contact',
+      'count'  => $points,
+      2        => $type]);
+
+    if ($expiration_interval && $expiration_unit) {
+      $out .= E::ts(', expiring after 1 %2', [
+        'plural' => ', expiring after %count %2s',
+        'count'  => $expiration_interval,
+        2        => $expiration_unit]);
+    } else {
+      $out .= E::ts(', which will not expire');
+    }
+  
+    return $out;
   }
 }
