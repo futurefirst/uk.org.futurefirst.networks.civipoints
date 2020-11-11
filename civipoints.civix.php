@@ -269,6 +269,7 @@ function _civipoints_civix_civicrm_managed(&$entities) {
   sort($mgdFiles);
   foreach ($mgdFiles as $file) {
     $es = include $file;
+    if (!is_array($es)) continue;
     foreach ($es as $e) {
       if (empty($e['module'])) {
         $e['module'] = E::LONG_NAME;

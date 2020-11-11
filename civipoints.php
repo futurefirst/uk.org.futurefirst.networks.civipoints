@@ -299,7 +299,13 @@ function _civipoints_is_civirules_installed() {
         $installed = TRUE;
       }
     }
-    return $installed;
+    if ($installed) return $installed;
+
+    // CiviRules doesn't appear in the list of extensions above, so check directly.
+    $select = CRM_Utils_SQL_Select::from('civicrm_extension')
+      ->where("full_name = '!ext'", array('!ext' =>'org.civicoop.civirules'))
+      ->where('is_active = !installed', array('!installed' => TRUE));
+    return (bool) count($select->execute()->fetchAll());
   }
   catch (Exception $e) {
     return FALSE;
