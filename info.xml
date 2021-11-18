@@ -14,27 +14,16 @@
     <author>David Knoll</author>
     <email>david@futurefirst.org.uk</email>
   </maintainer>
-  <releaseDate>2020-09-19</releaseDate>
-  <version>1.1</version>
+  <releaseDate>2021-11-18</releaseDate>
+  <version>1.2</version>
   <develStage>stable</develStage>
   <compatibility>
-    <ver>5.14</ver>
-    <ver>5.15</ver>
-    <ver>5.16</ver>
-    <ver>5.17</ver>
-    <ver>5.18</ver>
-    <ver>5.19</ver>
-    <ver>5.20</ver>
-    <ver>5.21</ver>
-    <ver>5.22</ver>
-    <ver>5.23</ver>
-    <ver>5.24</ver>
-    <ver>5.25</ver>
-    <ver>5.26</ver>
-    <ver>5.27</ver>
-    <ver>5.28</ver>
+    <ver>5.43</ver>
   </compatibility>
   <comments></comments>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
   <civix>
     <namespace>CRM/Points</namespace>
   </civix>
