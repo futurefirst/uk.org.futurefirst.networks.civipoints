@@ -20,7 +20,6 @@ function _civicrm_api3_points_create_spec(&$spec) {
 
   $spec['grantor_contact_id']['title']        = ts('Granting Contact');
   $spec['grantor_contact_id']['api.default']  = $cid;
-  $spec['grantor_contact_id']['api.required'] = 1;
 
   $spec['points']['title']                    = ts('Points Granted/Removed');
   $spec['points']['api.required']             = 1;
